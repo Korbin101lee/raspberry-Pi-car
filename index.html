@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Servo Control</title>
+    <style>
+        body { text-align: center; margin-top: 50px; }
+        button { font-size: 20px; padding: 10px; margin: 5px; }
+    </style>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Servo Control</h1>
+    <p>Use Arrow Keys to Control the Servo</p>
+    <script>
+        const socket = io();
+
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+            if (key === "ArrowLeft" || key === "ArrowRight") {
+                socket.emit('message', { type: 'keydown', key });
+            }
+        });
+
+        document.addEventListener("keyup", function(event) {
+            const key = event.key;
+            if (key === "ArrowLeft" || key === "ArrowRight") {
+                socket.emit('message', { type: 'keyup', key });
+            }
+        });
+    </script>
+</body>
+</html>
