@@ -3,17 +3,41 @@
 <head>
     <title>Servo Control</title>
     <style>
-        body { text-align: center; margin-top: 50px; }
-        button { font-size: 20px; padding: 10px; margin: 5px; }
+        body {
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
     </style>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Servo Control</h1>
-    <p>Use Arrow Keys to Control the Servo</p>
+    <p>Use Arrow Keys or Buttons to Control the Servo</p>
+
+    <!-- Buttons -->
+    <button type="button" onclick="moveServo('ArrowLeft')">Left</button>
+    <button type="button" onclick="moveServo('ArrowRight')">Right</button>
+
     <script>
         const socket = io();
 
+        // Function to handle button clicks
+        function moveServo(key) {
+            socket.emit('message', { type: 'keydown', key });
+
+            // Automatically reset to 0 after 1 second
+            setTimeout(() => {
+                socket.emit('message', { type: 'keyup', key });
+            }, 1000);
+        }
+
+        // Handle key presses
         document.addEventListener("keydown", function(event) {
             const key = event.key;
             if (key === "ArrowLeft" || key === "ArrowRight") {
